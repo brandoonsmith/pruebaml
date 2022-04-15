@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>HumanServiceImpl.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">mercadoLibre (1) (14/04/2022 11:29:32 p. m.)</a> &gt; <a href="../../index.html" class="el_group">mercadoLibre</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.prueba.mercadoLibre.service</a> &gt; <span class="el_source">HumanServiceImpl.java</span></div><h1>HumanServiceImpl.java</h1><pre class="source lang-java linenums">package com.prueba.mercadoLibre.service;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.prueba.mercadoLibre.dto.HumanDTO;
+import com.prueba.mercadoLibre.dto.StatsDTO;
+import com.prueba.mercadoLibre.model.Human;
+import com.prueba.mercadoLibre.repository.IHumanRepo;
+
+@Service
+<span class="fc" id="L15">public class HumanServiceImpl implements IHumanService {</span>
+
+	private final static String IS_MUTANT = &quot;YES&quot;;
+	private final static String IS_NOT_MUTANT = &quot;NOT&quot;;
+
+<span class="fc" id="L20">	private final Logger logger = Logger.getLogger(HumanServiceImpl.class.getName());</span>
+
+	private char[][] matriz;
+
+	public void setArrayMatrizCuadrada(char[] array, int posicion) {
+<span class="fc" id="L25">		this.matriz[posicion] = array;</span>
+<span class="fc" id="L26">	}</span>
+	
+	@Autowired
+	IHumanRepo iHumanRepo;
+
+	@SuppressWarnings(&quot;finally&quot;)
+	@Override
+	public boolean isMutant(HumanDTO humanDto) {
+		try {
+
+<span class="fc" id="L36">			String[] data = humanDto.getAdn();</span>
+
+<span class="fc" id="L38">			matriz = new char[data.length][data.length];</span>
+
+<span class="fc" id="L40">			int longitudMatriz = matriz.length;</span>
+
+<span class="fc" id="L42">			int cadenasEncontradas = 0;</span>
+
+			//Se valida la matriz
+<span class="fc bfc" id="L45" title="All 2 branches covered.">			if (!ValidarMatriz(data)) {</span>
+<span class="fc" id="L46">				return false;</span>
+			}
+
+			//Se recorre cada posición de la matriz 
+			//La variable x actuara como una variable en posición Horizontal
+			//La variable y actuara como una variable en posición vertical
+			do {
+<span class="fc bfc" id="L53" title="All 2 branches covered.">				for (int x = 0; x &lt; longitudMatriz; x++) {</span>
+
+<span class="fc bfc" id="L55" title="All 2 branches covered.">					if (cadenasEncontradas &lt; 2) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">						for (int y = 0; y &lt; longitudMatriz; y++) {</span>
+
+<span class="fc" id="L58">							char posicionActual = matriz[x][y];</span>
+
+							// Busqueda Horizontal
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">							if (cadenasEncontradas &lt; 2) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">								if ((y + 4) &lt;= longitudMatriz) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">									if (BusquedaHorizontal(x, y, posicionActual)) {</span>
+<span class="nc" id="L64">										cadenasEncontradas++;</span>
+
+<span class="nc" id="L66">										logger.log(Level.INFO,</span>
+<span class="nc" id="L67">												&quot;Encontró cadena de la letra &quot; + posicionActual + &quot; en Busqueda Horizontal, la posición es: &quot; </span>
+<span class="nc" id="L68">												+ x + &quot;,&quot; + y);</span>
+									}
+								}
+							} else {
+								break;
+							}
+
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">							if (cadenasEncontradas &lt; 2) {</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">								if ((x + 4) &lt;= longitudMatriz) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">									if (BusquedaVertical(x, y, posicionActual)) {</span>
+<span class="fc" id="L78">										cadenasEncontradas++;</span>
+
+<span class="fc" id="L80">										logger.log(Level.INFO,</span>
+<span class="fc" id="L81">												&quot;Encontró cadena de la letra &quot; + posicionActual + &quot; en Busqueda Vertical, la posición es: &quot; </span>
+<span class="fc" id="L82">												+ x + &quot;,&quot; + y);</span>
+									}
+								}
+							} else {
+								break;
+							}
+
+<span class="fc bfc" id="L89" title="All 2 branches covered.">							if (cadenasEncontradas &lt; 2) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">								if ((y + 4) &lt;= longitudMatriz) {</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">									if ((x + 4) &lt;= longitudMatriz) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">										if (BusquedaDiagonal(x, y, posicionActual)) {</span>
+<span class="fc" id="L93">											cadenasEncontradas++;</span>
+
+<span class="fc" id="L95">											logger.log(Level.INFO, &quot;Encontró cadena de la letra &quot; + posicionActual + &quot; en Busqueda Diagonal, la posición es:&quot;</span>
+<span class="fc" id="L96">													+ x + &quot;,&quot; + y);</span>
+
+										}
+									}
+								}
+							} else {
+								break;
+							}
+							// Busca por Diagonal Inversa
+<span class="fc bfc" id="L105" title="All 2 branches covered.">							if (cadenasEncontradas &lt; 2) {</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">								if (y &gt;= 3) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">									if ((x + 4) &lt;= longitudMatriz) {</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">										if (BusquedaDiagonalInversa(x, y, posicionActual)) {</span>
+<span class="nc" id="L109">											cadenasEncontradas++;</span>
+
+<span class="nc" id="L111">											logger.log(Level.INFO, &quot;Encontró cadena de la letra &quot; + posicionActual</span>
+<span class="nc" id="L112">													+ &quot; en DiagonalInversa, la posición es&quot; + x + &quot;,&quot; + y);</span>
+
+										}
+									}
+								}
+							} else {
+								break;
+							}
+						}
+					} else {
+						break;
+					}
+				}
+				break;
+				
+			//si encuentras más de una secuencia de cuatro letras iguales
+			} while (cadenasEncontradas &lt; 2);
+
+			//Si encontro al menos dos cadenas que cumplan la condición, es mutante
+<span class="fc bfc" id="L131" title="All 2 branches covered.">			if (cadenasEncontradas == 2) {</span>
+				try {
+<span class="fc" id="L133">					Human human = humanDto.humanDTOToHuman(humanDto);</span>
+<span class="fc" id="L134">					human.setIsMutant(IS_MUTANT);</span>
+<span class="fc" id="L135">					iHumanRepo.save(human);</span>
+<span class="pc" id="L136">				} catch (Exception ex) {</span>
+<span class="nc" id="L137">					logger.log(Level.SEVERE, &quot;Excepcion del sistema:&quot;, ex.getMessage());</span>
+<span class="nc" id="L138">				} finally {</span>
+<span class="fc" id="L139">					return true;</span>
+				}
+
+			} else {
+
+				try {
+<span class="fc" id="L145">					Human human = humanDto.humanDTOToHuman(humanDto);</span>
+<span class="fc" id="L146">					human.setIsMutant(IS_NOT_MUTANT);</span>
+<span class="fc" id="L147">					iHumanRepo.save(human);</span>
+<span class="pc" id="L148">				} catch (Exception ex) {</span>
+<span class="nc" id="L149">					logger.log(Level.SEVERE, &quot;Excepcion del sistema:&quot;, ex.getMessage());</span>
+<span class="nc" id="L150">				} finally {</span>
+<span class="fc" id="L151">					return false;</span>
+				}
+			}
+<span class="nc" id="L154">		} catch (Exception ex) {</span>
+<span class="nc" id="L155">			logger.log(Level.SEVERE, &quot;Excepcion del sistema:&quot;, ex.getMessage());</span>
+<span class="nc" id="L156">			return false;</span>
+		}
+	}
+
+	/**
+	 * Se encarga de validar si la matriz contiene letras no permitidas o si hay una
+	 * cadena con una mayor longitud que las demas cadenas de la matriz
+	 * 
+	 * @param data
+	 * @return
+	 */
+	private boolean ValidarMatriz(String[] data) {
+		try {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">			for (int i = 0; i &lt; data.length; i++) {</span>
+
+<span class="fc bfc" id="L171" title="All 2 branches covered.">				if (!data[i].matches(&quot;[ATCGatcg]*&quot;)) {</span>
+<span class="fc" id="L172">					logger.log(Level.WARNING, &quot;ERROR: Tiene letras fuera del dominio ATCG&quot;);</span>
+<span class="fc" id="L173">					return false;</span>
+				}
+
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">				if (data[i].length() != data.length) {</span>
+<span class="nc" id="L177">					logger.log(Level.WARNING, &quot;ERROR: una cadena tiene tamaño distinto al de la matriz&quot;);</span>
+<span class="nc" id="L178">					return false;</span>
+				}
+
+				// Conversión a letras mayusculas
+<span class="fc" id="L182">				this.setArrayMatrizCuadrada(data[i].toUpperCase().toCharArray(), i);</span>
+
+			}
+
+<span class="fc" id="L186">			return true;</span>
+<span class="nc" id="L187">		} catch (Exception ex) {</span>
+<span class="nc" id="L188">			logger.log(Level.SEVERE, &quot;Excepcion del sistema:&quot;, ex.getMessage());</span>
+<span class="nc" id="L189">			return false;</span>
+		}
+
+	}
+
+	private boolean BusquedaHorizontal(int fila, int posicion, char posicionActual) {
+
+<span class="fc" id="L196">		String cadena = &quot;&quot;;</span>
+<span class="fc" id="L197">		boolean encontroCadena = false;</span>
+
+<span class="fc" id="L199">		cadena = &quot;&quot; + posicionActual + matriz[fila][posicion + 1] + matriz[fila][posicion + 2]</span>
+<span class="fc" id="L200">				+ matriz[fila][posicion + 3];</span>
+
+<span class="pc bpc" id="L202" title="4 of 5 branches missed.">		switch (cadena) {</span>
+		case &quot;AAAA&quot;:
+<span class="nc" id="L204">			encontroCadena = true;</span>
+<span class="nc" id="L205">			break;</span>
+		case &quot;TTTT&quot;:
+<span class="nc" id="L207">			encontroCadena = true;</span>
+<span class="nc" id="L208">			break;</span>
+		case &quot;CCCC&quot;:
+<span class="nc" id="L210">			encontroCadena = true;</span>
+<span class="nc" id="L211">			break;</span>
+		case &quot;GGGG&quot;:
+<span class="nc" id="L213">			encontroCadena = true;</span>
+<span class="nc" id="L214">			break;</span>
+		default:
+<span class="fc" id="L216">			encontroCadena = false;</span>
+			break;
+
+		}
+
+<span class="fc" id="L221">		return encontroCadena;</span>
+	}
+
+	private boolean BusquedaVertical(int fila, int posicion, char posicionActual) {
+
+<span class="fc" id="L226">		boolean encontroCadena = false;</span>
+<span class="fc" id="L227">		String cadena = &quot;&quot;;</span>
+<span class="fc" id="L228">		cadena = &quot;&quot; + posicionActual + matriz[fila + 1][posicion] + matriz[fila + 2][posicion]</span>
+<span class="fc" id="L229">				+ matriz[fila + 3][posicion];</span>
+
+<span class="pc bpc" id="L231" title="2 of 5 branches missed.">		switch (cadena) {</span>
+		case &quot;AAAA&quot;:
+<span class="fc" id="L233">			encontroCadena = true;</span>
+<span class="fc" id="L234">			break;</span>
+		case &quot;TTTT&quot;:
+<span class="nc" id="L236">			encontroCadena = true;</span>
+<span class="nc" id="L237">			break;</span>
+		case &quot;CCCC&quot;:
+<span class="nc" id="L239">			encontroCadena = true;</span>
+<span class="nc" id="L240">			break;</span>
+		case &quot;GGGG&quot;:
+<span class="fc" id="L242">			encontroCadena = true;</span>
+<span class="fc" id="L243">			break;</span>
+		default:
+<span class="fc" id="L245">			encontroCadena = false;</span>
+			break;
+
+		}
+
+<span class="fc" id="L250">		return encontroCadena;</span>
+	}
+
+	private boolean BusquedaDiagonal(int fila, int posicion, char posicionActual) {
+<span class="fc" id="L254">		String cadena = &quot;&quot;;</span>
+<span class="fc" id="L255">		cadena = &quot;&quot; + posicionActual + matriz[fila + 1][posicion + 1] + matriz[fila + 2][posicion + 2]</span>
+<span class="fc" id="L256">				+ matriz[fila + 3][posicion + 3];</span>
+<span class="pc bpc" id="L257" title="3 of 5 branches missed.">		switch (cadena) {</span>
+		case &quot;AAAA&quot;:
+<span class="fc" id="L259">			return true;</span>
+		case &quot;TTTT&quot;:
+<span class="nc" id="L261">			return true;</span>
+		case &quot;CCCC&quot;:
+<span class="nc" id="L263">			return true;</span>
+		case &quot;GGGG&quot;:
+<span class="nc" id="L265">			return true;</span>
+		default:
+<span class="fc" id="L267">			return false;</span>
+
+		}
+	}
+
+	private boolean BusquedaDiagonalInversa(int fila, int posicion, char posicionActual) {
+<span class="fc" id="L273">		String cadena = &quot;&quot;;</span>
+<span class="fc" id="L274">		cadena = &quot;&quot; + posicionActual + matriz[fila + 1][posicion - 1] + matriz[fila + 2][posicion - 2]</span>
+<span class="fc" id="L275">				+ matriz[fila + 3][posicion - 3];</span>
+<span class="pc bpc" id="L276" title="4 of 5 branches missed.">		switch (cadena) {</span>
+		case &quot;AAAA&quot;:
+<span class="nc" id="L278">			return true;</span>
+		case &quot;TTTT&quot;:
+<span class="nc" id="L280">			return true;</span>
+		case &quot;CCCC&quot;:
+<span class="nc" id="L282">			return true;</span>
+		case &quot;GGGG&quot;:
+<span class="nc" id="L284">			return true;</span>
+		default:
+<span class="fc" id="L286">			return false;</span>
+
+		}
+	}
+
+	@Override
+	public StatsDTO stats() {
+		try {
+<span class="fc" id="L294">			StatsDTO stats = new StatsDTO();</span>
+<span class="fc" id="L295">			long totalHumanos = iHumanRepo.count();</span>
+<span class="fc" id="L296">			logger.log(Level.INFO, &quot;Total Humanos : &quot;+totalHumanos);</span>
+<span class="fc" id="L297">			long totalMutants = iHumanRepo.findByisMutant(IS_MUTANT);</span>
+<span class="fc" id="L298">			logger.log(Level.INFO, &quot;Total Mutantes : &quot;+totalMutants);</span>
+			
+<span class="fc" id="L300">			stats.setCount_humnan_dna(totalHumanos);</span>
+<span class="fc" id="L301">			stats.setCount_mutant_dna(totalMutants);</span>
+<span class="pc bpc" id="L302" title="2 of 4 branches missed.">			if(totalMutants != 0 &amp;&amp; totalHumanos != 0) {</span>
+<span class="fc" id="L303">				float ratio = ((float)totalMutants/totalHumanos);</span>
+<span class="fc" id="L304">				logger.log(Level.INFO, &quot;Relación : &quot;+ratio);</span>
+<span class="fc" id="L305">				stats.setRatio(ratio);</span>
+			}
+<span class="fc" id="L307">			return stats;</span>
+<span class="nc" id="L308">		} catch (Exception ex) {</span>
+<span class="nc" id="L309">			logger.log(Level.SEVERE, &quot;Excepcion del sistema:&quot;, ex.getMessage());</span>
+<span class="nc" id="L310">			return null;</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span>mercadoLibre (1) (14/04/2022 11:29:32 p. m.)</div></body></html>
